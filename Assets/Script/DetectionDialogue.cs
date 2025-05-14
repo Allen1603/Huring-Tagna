@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DetectionDialogue : MonoBehaviour
 {
     public GameObject dialogueuPanel;
     private bool isPlayerInRange = false;
 
+    private PlayerInputAction uiInputActions;
+    private bool inputTrue = false;
     void Start()
     {
         dialogueuPanel.SetActive(false);
     }
-
+    private void Awake()
+    {
+        uiInputActions = new PlayerInputAction();
+        uiInputActions.UI.NPC.performed += ctx => inputTrue = true;
+    }
+    private void OnEnable() => uiInputActions.Enable();
+    private void OnDisable() => uiInputActions.Disable();
     void Update()
     {
-        if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+        if (inputTrue)
         {
             dialogueuPanel.SetActive(true);
         }

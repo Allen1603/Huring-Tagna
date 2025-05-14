@@ -4,7 +4,7 @@ public class PlayerPickup : MonoBehaviour
 {
     public float pickupRange = 3f;
     public KeyCode pickupKey = KeyCode.E;
-    private GameObject itemInRange;
+    private ItemPickup itemInRange;
 
     void Update()
     {
@@ -16,40 +16,39 @@ public class PlayerPickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Item"))
+        ItemPickup itemPickup = other.GetComponent<ItemPickup>();
+        if (itemPickup != null)
         {
             float distance = Vector3.Distance(transform.position, other.transform.position);
             if (distance <= pickupRange)
             {
-                itemInRange = other.gameObject;
-                Debug.Log("Press E to pick up " + itemInRange.name);
+                itemInRange = itemPickup;
+                Debug.Log("Press E to pick up " + itemPickup.itemData.itemName);
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == itemInRange)
+        if (itemInRange != null && other.gameObject == itemInRange.gameObject)
         {
             itemInRange = null;
         }
     }
 
-    void PickupItem(GameObject item)
+    void PickupItem(ItemPickup item)
     {
-        ItemPickup pickupComponent = item.GetComponent<ItemPickup>();
-        if (pickupComponent != null)
+        if (item.itemData != null)
         {
-            InventoryItem inventoryItem = pickupComponent.item;
-            InventoryManager.Instance.AddItem(inventoryItem);
-            Debug.Log("Picked up " + inventoryItem.itemName);
+            InventoryManager.Instance.AddItem(item.itemData);
+            Debug.Log("Picked up " + item.itemData.itemName);
         }
         else
         {
-            Debug.LogWarning("Item does not have ItemPickup script attached.");
+            Debug.LogWarning("This item has no InventoryItem assigned!");
         }
 
-        Destroy(item);
+        Destroy(item.gameObject);
         itemInRange = null;
     }
 
