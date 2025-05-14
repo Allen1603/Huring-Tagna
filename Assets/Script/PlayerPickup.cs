@@ -1,14 +1,24 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerPickup : MonoBehaviour
 {
     public float pickupRange = 3f;
-    public KeyCode pickupKey = KeyCode.E;
     private ItemPickup itemInRange;
 
+    private PlayerInputAction uiInputActions;
+    private bool inputTrigger = false;
+    private void Awake()
+    {
+        uiInputActions = new PlayerInputAction();
+        uiInputActions.UI.Pickup.performed += ctx => inputTrigger = true;
+    }
+
+    private void OnEnable() => uiInputActions.Enable();
+    private void OnDisable() => uiInputActions.Disable();
     void Update()
     {
-        if (itemInRange != null && Input.GetKeyDown(pickupKey))
+        if (itemInRange != null && inputTrigger)
         {
             PickupItem(itemInRange);
         }
@@ -23,7 +33,6 @@ public class PlayerPickup : MonoBehaviour
             if (distance <= pickupRange)
             {
                 itemInRange = itemPickup;
-                Debug.Log("Press E to pick up " + itemPickup.itemData.itemName);
             }
         }
     }

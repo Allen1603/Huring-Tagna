@@ -18,9 +18,11 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         uiInputActions = new PlayerInputAction();
-        uiInputActions.UI.Inventory.performed += ctx => ToggleInventory();
+        uiInputActions.UI.Inventory.performed += ctx => {
+            Debug.Log("Inventory key pressed");
+            ToggleInventory();
+        };
     }
-
     private void OnEnable() => uiInputActions.Enable();
     private void OnDisable() => uiInputActions.Disable();
 
@@ -32,8 +34,13 @@ public class InventoryUI : MonoBehaviour
 
     void ToggleInventory()
     {
+        isOpen = !isOpen;
         inventoryPanel.SetActive(isOpen);
-        UpdateUI();
+
+        if (isOpen)
+        {
+            UpdateUI();
+        }
     }
 
     void InitializeSlots()

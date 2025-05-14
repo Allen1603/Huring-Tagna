@@ -1,35 +1,53 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class DialogueNPC : MonoBehaviour
 {
+    [Header("Dialogue Settings")]
     public TextMeshProUGUI textComponent;
     public string[] lines;
-    public float textSpeed;
+    public float textSpeed = 0.05f;
 
-    private int index;
+    private int index = 0;
+    private PlayerInputAction uiInputActions;
+    private bool inputTrigger = false;
+    private Coroutine typingCoroutine;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        uiInputActions = new PlayerInputAction();
+        uiInputActions.UI.NextDialogue.performed += ctx => inputTrigger = true;
+    }
+
+    private void OnEnable() => uiInputActions.Enable();
+    private void OnDisable() => uiInputActions.Disable();
+
+    private void Start()
     {
         textComponent.text = string.Empty;
         StartDialogue();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (inputTrigger)
         {
+            inputTrigger = false; // Reset input trigger
+
+            // If current text is fully shown, go to next line
             if (textComponent.text == lines[index])
             {
-                NextLines();
+                ShowNextLine();
             }
             else
             {
-                StopAllCoroutines();
+                // Fast-forward typing effect
+                if (typingCoroutine != null)
+                {
+                    StopCoroutine(typingCoroutine);
+                }
                 textComponent.text = lines[index];
             }
         }
@@ -38,11 +56,13 @@ public class DialogueNPC : MonoBehaviour
     void StartDialogue()
     {
         index = 0;
-        StartCoroutine(TypeLines());
+        typingCoroutine = StartCoroutine(TypeLine());
     }
 
-    IEnumerator TypeLines()
+    IEnumerator TypeLine()
     {
+        textComponent.text = string.Empty;
+
         foreach (char c in lines[index].ToCharArray())
         {
             textComponent.text += c;
@@ -50,17 +70,25 @@ public class DialogueNPC : MonoBehaviour
         }
     }
 
-    void NextLines()
+    void ShowNextLine()
     {
         if (index < lines.Length - 1)
         {
             index++;
-            textComponent.text = string.Empty;
-            StartCoroutine(TypeLines());
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+            }
+            typingCoroutine = StartCoroutine(TypeLine());
         }
         else
         {
-            gameObject.SetActive(false);
+            EndDialogue();
         }
+    }
+
+    void EndDialogue()
+    {
+        gameObject.SetActive(false);
     }
 }

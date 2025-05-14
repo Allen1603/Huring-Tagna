@@ -138,9 +138,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""NPC"",
+                    ""name"": ""TalkNPC"",
                     ""type"": ""Button"",
                     ""id"": ""6a5bd2be-29a0-4698-b59b-e02f35031973"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6e1d1bb-1895-4e4e-8609-281a18fc75f1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -177,7 +186,18 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NPC"",
+                    ""action"": ""TalkNPC"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7cd3f84-2d9c-45ca-98ef-958637e02621"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -194,7 +214,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
         m_UI_Pickup = m_UI.FindAction("Pickup", throwIfNotFound: true);
-        m_UI_NPC = m_UI.FindAction("NPC", throwIfNotFound: true);
+        m_UI_TalkNPC = m_UI.FindAction("TalkNPC", throwIfNotFound: true);
+        m_UI_NextDialogue = m_UI.FindAction("NextDialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -312,14 +333,16 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Inventory;
     private readonly InputAction m_UI_Pickup;
-    private readonly InputAction m_UI_NPC;
+    private readonly InputAction m_UI_TalkNPC;
+    private readonly InputAction m_UI_NextDialogue;
     public struct UIActions
     {
         private @PlayerInputAction m_Wrapper;
         public UIActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
         public InputAction @Pickup => m_Wrapper.m_UI_Pickup;
-        public InputAction @NPC => m_Wrapper.m_UI_NPC;
+        public InputAction @TalkNPC => m_Wrapper.m_UI_TalkNPC;
+        public InputAction @NextDialogue => m_Wrapper.m_UI_NextDialogue;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -335,9 +358,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Pickup.started += instance.OnPickup;
             @Pickup.performed += instance.OnPickup;
             @Pickup.canceled += instance.OnPickup;
-            @NPC.started += instance.OnNPC;
-            @NPC.performed += instance.OnNPC;
-            @NPC.canceled += instance.OnNPC;
+            @TalkNPC.started += instance.OnTalkNPC;
+            @TalkNPC.performed += instance.OnTalkNPC;
+            @TalkNPC.canceled += instance.OnTalkNPC;
+            @NextDialogue.started += instance.OnNextDialogue;
+            @NextDialogue.performed += instance.OnNextDialogue;
+            @NextDialogue.canceled += instance.OnNextDialogue;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -348,9 +374,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Pickup.started -= instance.OnPickup;
             @Pickup.performed -= instance.OnPickup;
             @Pickup.canceled -= instance.OnPickup;
-            @NPC.started -= instance.OnNPC;
-            @NPC.performed -= instance.OnNPC;
-            @NPC.canceled -= instance.OnNPC;
+            @TalkNPC.started -= instance.OnTalkNPC;
+            @TalkNPC.performed -= instance.OnTalkNPC;
+            @TalkNPC.canceled -= instance.OnTalkNPC;
+            @NextDialogue.started -= instance.OnNextDialogue;
+            @NextDialogue.performed -= instance.OnNextDialogue;
+            @NextDialogue.canceled -= instance.OnNextDialogue;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -377,6 +406,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
         void OnInventory(InputAction.CallbackContext context);
         void OnPickup(InputAction.CallbackContext context);
-        void OnNPC(InputAction.CallbackContext context);
+        void OnTalkNPC(InputAction.CallbackContext context);
+        void OnNextDialogue(InputAction.CallbackContext context);
     }
 }

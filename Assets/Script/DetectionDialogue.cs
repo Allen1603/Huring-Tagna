@@ -1,31 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DetectionDialogue : MonoBehaviour
 {
-    public GameObject dialogueuPanel;
+    public GameObject dialoguePanel;
     private bool isPlayerInRange = false;
 
     private PlayerInputAction uiInputActions;
-    private bool inputTrue = false;
-    void Start()
-    {
-        dialogueuPanel.SetActive(false);
-    }
+    private bool inputTriggered = false;
+
     private void Awake()
     {
         uiInputActions = new PlayerInputAction();
-        uiInputActions.UI.NPC.performed += ctx => inputTrue = true;
+        uiInputActions.UI.TalkNPC.performed += ctx => inputTriggered = true;
     }
+
     private void OnEnable() => uiInputActions.Enable();
     private void OnDisable() => uiInputActions.Disable();
-    void Update()
+
+    private void Start()
     {
-        if (inputTrue)
+        dialoguePanel.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (inputTriggered && isPlayerInRange)
         {
-            dialogueuPanel.SetActive(true);
+            dialoguePanel.SetActive(true);
+            inputTriggered = false;
         }
     }
 
@@ -42,7 +45,7 @@ public class DetectionDialogue : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
-            dialogueuPanel.SetActive(false); // Optional: auto-close when leaving
+            dialoguePanel.SetActive(false);
         }
     }
 }

@@ -461,7 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 651528844}
   slotPrefab: {fileID: 3028783057184815352, guid: f59661434b123234db210497426b730d, type: 3}
-  slotParent: {fileID: 398949822}
+  slotParent: {fileID: 340750528}
 --- !u!1 &539851051
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +811,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupRange: 3
-  pickupKey: 101
 --- !u!1 &639804832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,7 +1579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c357ad54a0a192f449f9faccb3995929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueuPanel: {fileID: 809014834}
+  dialoguePanel: {fileID: 809014834}
 --- !u!65 &1594728618
 BoxCollider:
   m_ObjectHideFlags: 0
