@@ -13,8 +13,11 @@ public class PlayerMovements : MonoBehaviour
     private bool jumpRequested;
     private bool isGrounded;
 
+    private Animator animator;
+
     void Awake()
     {
+        animator = GetComponent<Animator>(); // Get the Animator component
         rb = GetComponent<Rigidbody>();
         inputActions = new PlayerInputAction();
     }
@@ -40,6 +43,8 @@ public class PlayerMovements : MonoBehaviour
 
     void HandleMovement()
     {
+     
+
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
 
         // Move the Rigidbody
@@ -53,6 +58,10 @@ public class PlayerMovements : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(move);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * 10f);
         }
+
+        // Set walking animation
+        bool isMoving = moveInput.sqrMagnitude > 0.01f;
+        animator.SetBool("isMoving", isMoving);
     }
 
     void HandleJump()
