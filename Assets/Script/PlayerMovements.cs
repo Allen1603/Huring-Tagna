@@ -41,9 +41,18 @@ public class PlayerMovements : MonoBehaviour
     void HandleMovement()
     {
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        // Move the Rigidbody
         Vector3 velocity = move * moveSpeed;
         Vector3 currentVelocity = rb.velocity;
         rb.velocity = new Vector3(velocity.x, currentVelocity.y, velocity.z);
+
+        // Rotate the character to face movement direction (only if there's movement)
+        if (move != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(move);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * 10f);
+        }
     }
 
     void HandleJump()

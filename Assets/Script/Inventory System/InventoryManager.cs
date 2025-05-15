@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance;
+    public static InventoryManager Instance { get; private set; }
 
+    public List<InventorySlot> inventorySlots;
     public int maxSlots = 20;
-    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Ensure only one instance
+        }
         else
-            Destroy(gameObject);
+        {
+            Instance = this;
+        }
     }
 
     public void AddItem(InventoryItem item)

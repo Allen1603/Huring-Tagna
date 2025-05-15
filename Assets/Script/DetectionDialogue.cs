@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class DetectionDialogue : MonoBehaviour
 {
     public GameObject dialoguePanel;
+    public GameObject pressButtonPanel;
     private bool isPlayerInRange = false;
 
     private PlayerInputAction uiInputActions;
@@ -29,6 +30,7 @@ public class DetectionDialogue : MonoBehaviour
         {
             dialoguePanel.SetActive(true);
             inputTriggered = false;
+            pressButtonPanel.SetActive(false);
         }
     }
 
@@ -37,6 +39,7 @@ public class DetectionDialogue : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
+            pressButtonPanel.SetActive(true);
         }
     }
 
@@ -46,6 +49,7 @@ public class DetectionDialogue : MonoBehaviour
         {
             isPlayerInRange = false;
             dialoguePanel.SetActive(false);
+            pressButtonPanel.SetActive(false);
         }
     }
 }
