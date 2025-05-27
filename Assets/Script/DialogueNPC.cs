@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 
@@ -9,6 +10,8 @@ public class DialogueNPC : MonoBehaviour
     public TextMeshProUGUI textComponent;
     public string[] lines;
     public float textSpeed = 0.05f;
+
+    public GameObject loadingScreen;
 
     private int index = 0;
     private PlayerInputAction uiInputActions;
@@ -89,6 +92,16 @@ public class DialogueNPC : MonoBehaviour
 
     void EndDialogue()
     {
-        gameObject.SetActive(false);
+        LoadSceneAsync(1); // Load scene index 1
+    }
+
+    void LoadSceneAsync(int sceneIndex)
+    {
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(true);
+        }
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
     }
 }

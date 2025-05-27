@@ -6,6 +6,7 @@ public class PlayerMovements : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
+    public bool canMove = true;
 
     private Rigidbody rb;
     private PlayerInputAction inputActions;
@@ -37,13 +38,21 @@ public class PlayerMovements : MonoBehaviour
 
     void FixedUpdate()
     {
-        HandleMovement();
-        HandleJump();
+        if (canMove)
+        {
+            HandleMovement();
+            HandleJump();
+        }
+        else
+        {
+            // Stop movement immediately
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            animator.SetBool("isMoving", false);
+        }
     }
 
     void HandleMovement()
     {
-    
 
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
 

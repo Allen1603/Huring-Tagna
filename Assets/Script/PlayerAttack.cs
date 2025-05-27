@@ -11,10 +11,13 @@ public class PlayerAttack : MonoBehaviour
     private float lastAttackTime = 0f;
     private bool isAttacking = false;
 
+    private PlayerMovements playerMovements;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
-       // swordCollider.enabled = false;
+        playerMovements = GetComponent<PlayerMovements>();
+        // swordCollider.enabled = false;
 
         inputActions = new PlayerInputAction();
         inputActions.Player.Attack.performed += ctx => TryAttack();
@@ -46,13 +49,16 @@ public class PlayerAttack : MonoBehaviour
         if (!isAttacking && Time.time - lastAttackTime >= attackCooldown)
         {
             isAttacking = true;
+            playerMovements.canMove = false; // ? Stop movement
             animator.SetTrigger("Attack");
             lastAttackTime = Time.time;
         }
     }
+
     public void EndAttack()
     {
         isAttacking = false;
+        playerMovements.canMove = true; // ? Allow movement again
     }
 
     // Animation Event
