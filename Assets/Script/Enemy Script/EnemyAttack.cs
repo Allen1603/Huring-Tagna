@@ -45,6 +45,7 @@ public class EnemyAI : MonoBehaviour
                 isAttacking = true;
                 agent.isStopped = true;
                 animator.SetTrigger("Attack");
+                animator.SetBool("Attack 0", true);
                 time = 0f;
             }
         }
@@ -57,6 +58,8 @@ public class EnemyAI : MonoBehaviour
     public void EndAttack()
     {
         isAttacking = false;
+        animator.ResetTrigger("Attack");
+        animator.SetBool("Attack 0", false);
         agent.isStopped = false;
     }
 
