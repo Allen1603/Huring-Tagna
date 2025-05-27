@@ -43,7 +43,7 @@ public class PlayerMovements : MonoBehaviour
 
     void HandleMovement()
     {
-     
+    
 
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
 
@@ -62,6 +62,7 @@ public class PlayerMovements : MonoBehaviour
         // Set walking animation
         bool isMoving = moveInput.sqrMagnitude > 0.01f;
         animator.SetBool("isMoving", isMoving);
+       
     }
 
     void HandleJump()
