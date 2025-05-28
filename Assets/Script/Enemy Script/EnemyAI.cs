@@ -7,7 +7,11 @@ public class EnemyAI : MonoBehaviour
     private Transform player;
     private Animator animator;
     private bool isAttacking = false;
-    private float time =  0f;
+    private float time = 0f;
+
+    [Header("Combat Settings")]
+    public float maxHealth = 100f;
+    private float currentHealth;
 
     public float attackRange = 5f;
     public float attackCooldown = 1f;
@@ -15,6 +19,8 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
+
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
@@ -27,7 +33,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null || currentHealth <= 0) return;
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -63,7 +69,25 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = false;
     }
 
-    // Optional: Visualize detection radius in editor
+    public void TakeDamage(float amount)
+    {
+        if (currentHealth <= 0) return;
+
+        currentHealth -= amount;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        GameManager.Instance.UnregisterEnemy(gameObject);
+        // Optional: play death animation here before destroying
+        Destroy(gameObject);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
