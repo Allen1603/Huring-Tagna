@@ -910,6 +910,7 @@ MonoBehaviour:
   attackRange: 2
   attackCooldown: 1
   detectionRadius: 15
+  deathParticle: {fileID: 3120593964117035352, guid: 150629c12169a6e4a8ead7aae04aa598, type: 3}
 --- !u!95 &5446644199952644600
 Animator:
   serializedVersion: 5

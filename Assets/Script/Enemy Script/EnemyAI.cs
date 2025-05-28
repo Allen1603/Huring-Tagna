@@ -17,6 +17,9 @@ public class EnemyAI : MonoBehaviour
     public float attackCooldown = 1f;
     public float detectionRadius = 15f;
 
+
+    public GameObject deathParticle;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -85,6 +88,8 @@ public class EnemyAI : MonoBehaviour
     {
         GameManager.Instance.UnregisterEnemy(gameObject);
         // Optional: play death animation here before destroying
+      GameObject deathEffect =  Instantiate(deathParticle, transform.position, Quaternion.identity);
+        Destroy(deathEffect, 1);
         Destroy(gameObject);
     }
 
